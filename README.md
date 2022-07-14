@@ -9,7 +9,7 @@ Another useful app is [SQLiteStudio](https://sqlitestudio.pl). With this applica
 
 ## Project structure
 
-To run the module, you need to move the `SQLite3Module` folder to the `root` of your project. Project structure required to launch:
+To run the module, you need to move the [SQLite3Module](SQLite3Module) folder to the `root` of your project. Project structure required to launch:
 
 |-> `Your project folder`  
 &nbsp;&nbsp;&nbsp;&nbsp; |-> `SQLite3Module`  
