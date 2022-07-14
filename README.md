@@ -12,7 +12,7 @@ Another useful app is [SQLiteStudio](https://sqlitestudio.pl). With this applica
 To run the module, you need to move the `SQLite3Module` folder to the `root` of your project. Project structure required to launch:
 
 |-> `Your project folder`  
-&nbsp;&nbsp;&nbsp;&nbsp; |-> `SQLite3Module` 
+&nbsp;&nbsp;&nbsp;&nbsp; |-> `SQLite3Module`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |-> `__init__.py`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |-> `SQLite3_base.py`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |-> `SQLite3_table.py`  
