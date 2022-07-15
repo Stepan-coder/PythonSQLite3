@@ -1,4 +1,4 @@
-# The simplest SQL connector for non - production develop :)
+# The simplest SQLile3 ORM for non - production develop :)
 
 ## Introduction
 
@@ -24,7 +24,7 @@ To run the module, you need to move the [SQLite3Module](SQLite3Module) folder to
 
 ## Documentation
 
-### SQLite3_DBType.py
+#### SQLite3_DBType.py
 
 There are several generally accepted data types for storing information in the database, but due to the brevity of the `SQLite3`, only some are used:
 
@@ -34,8 +34,25 @@ There are several generally accepted data types for storing information in the d
 * `TEXT` - Plain text like in sms.  
 * `BLOB` - Binary representation of large objects stored exactly as it was entered. Simply put 101.  
 
-### SQLite3_base.py
+#### SQLite3_base.py
 
--> `cursor` - This **property** returns the cursor for the database (directly the thing that works with database cells)  
--> `connector` - This **property** returns the connector for the database (the thing through which the connection to the database is established)  
-* 
+* `cursor` - This **property** returns the cursor for the database (directly the thing that works with database cells)  
+* `connector` - This **property** returns the connector for the database (the thing through which the connection to the database is established)  
+* `create_table` - This **method** creates a table in the database
+* `get_table` - This **method** get the "Table" object for further interaction with it.
+
+#### SQLite3_table.py
+
+* `__nonzero__` - This **method** returns a `bool` whether the table is declared.
+* `column_names` - This **property** returns a list of column names.
+* `create_table` - This **method** creates a table with the specified columns. If `primary_key` is not specified, then the first column will be considered the identifier, otherwise - the one selected by the user.  
+* `get_from_cell` - This **method** returns the value from the cell located in the column `column_name` and the row with the identifier `key`.
+* `set_to_cell` - This **method** writes the value of new_value in the column_name column to the string with the id `key`.
+* `add_row` - This **method** adds a new row to the table
+* `get_row` - This **method** gets values from all columns of the `row` table
+* `delete_row` - This **method** removes the `row` from the table
+* `get_column` - This **method** returns all values from the `column_name` column
+* `get_all_keys` - This **method** returns all values of all identifiers (a column whose values are unique for each row)
+* `commit` - This **method** confirms the entry in the table
+
+### Examples

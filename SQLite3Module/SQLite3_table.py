@@ -60,7 +60,7 @@ class Table:
 
     def set_to_cell(self, key: str, column_name: str, new_value: Any, commit: bool = True) -> None:
         """
-        Этот метод записывает значение new_value в колонку column_name в строку с идентификатором key
+        This **method** writes the value of new_value in the column_name column to the string with the id `key`.
         :param key: Unique identifier
         :param column_name: Column name
         :param new_value: The value we want to write
