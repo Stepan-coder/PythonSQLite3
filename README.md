@@ -24,7 +24,11 @@ To run the module, you need to move the [SQLite3Module](SQLite3Module) folder to
 
 ## Documentation
 
+There are several generally accepted data types for storing information in the database, but due to the brevity of the `SQLite3`, only some are used:
 
-
-
+* `NULL` - Just nothing, nothing at all.  
+* `INTEGER` - An integer such as 1, 2, 10, 100000, -1000000000.  
+* `REAL` - Floating point number, e.g. 1.5.  
+* `TEXT` - Plain text like in sms.  
+* `BLOB` - Binary representation of large objects stored exactly as it was entered. Simply put 101.  
 
