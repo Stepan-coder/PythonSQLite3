@@ -24,6 +24,8 @@ To run the module, you need to move the [SQLite3Module](SQLite3Module) folder to
 
 ## Documentation
 
+### SQLite3_DBType.py
+
 There are several generally accepted data types for storing information in the database, but due to the brevity of the `SQLite3`, only some are used:
 
 * `NULL` - Just nothing, nothing at all.  
@@ -32,3 +34,8 @@ There are several generally accepted data types for storing information in the d
 * `TEXT` - Plain text like in sms.  
 * `BLOB` - Binary representation of large objects stored exactly as it was entered. Simply put 101.  
 
+### SQLite3_base.py
+
+-> `cursor` - This **property** returns the cursor for the database (directly the thing that works with database cells)  
+-> `connector` - This **property** returns the connector for the database (the thing through which the connection to the database is established)  
+* 
