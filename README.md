@@ -58,7 +58,7 @@ There are several generally accepted data types for storing information in the d
 * `commit` - This **method** confirms the entry in the table
 
 ### Examples
-
+***
 To work with `SQLite3Module`, it is enough to simply import it into your project, the main file is `SQLite3Module/SQLite3_base.py `.  
 ```Python3
 import os
