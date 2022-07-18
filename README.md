@@ -59,7 +59,7 @@ There are several generally accepted data types for storing information in the d
 
 ### Examples
 
-Для работы с `SQLite3Module` достаточно его просто импортировать в ваш проект, основным файлом является `SQLite3Module/SQLite3_base.py`.
+To work with `SQLite3Module`, it is enough to simply import it into your project, the main file is `SQLite3Module/SQLite3_base.py `.  
 ```Python3
 import os
 from SQLite3Module.SQLite3_base import *
@@ -67,8 +67,8 @@ from SQLite3Module.SQLite3_base import *
 
 my_sqlite3_database = DataBase(path=os.getcwd(), filename="my_BD.sqlite3")
 ```
-Теперь не надо знать язык `SQL` чтобы создать таблицу, достаточно просто вызвать соответствующий метод и передать в него соответствующие параметры.  
-*В данном конкеретном случае, уникальным ключом `primary_key` будет колонка `user_id`.*
+Now you don't need to know the `SQL` language to create a table, just call the appropriate method and pass the appropriate parameters to it. 
+*In this concrete case, the unique key `primary_key` will be the column `user_id'.*
 ```Python3
 my_sqlite3_database.add_table(tablename="my_first_table",
                               columns={"user_id": DBType.INTEGER,
@@ -77,8 +77,8 @@ my_sqlite3_database.add_table(tablename="my_first_table",
                                        "real value": DBType.REAL})
 ```
 Yes, we can creating one more table :)
-Чтобы изменить `primary_key` нужно при инициализации таблицы, явно указать колонку, которую вы хотите сделать основной.
-Например, вот так:
+To change the `primary_key`, when initializing the table, you need to explicitly specify the column that you want to make the main one.
+For example, like this:
 ```Python3
 my_sqlite3_database.add_table(tablename="my_second_table", 
                               columns={"user_id": DBType.INTEGER,
@@ -92,4 +92,5 @@ my_sqlite3_database.add_table(tablename="my_second_table",
 ```Python3
 my_sqlite3_database.delete_table(table_name="my_first_table")
 ```
-
+Naturally, what can be created can be deleted. 
+**Deleting a table is not a cancellable action!!!**
