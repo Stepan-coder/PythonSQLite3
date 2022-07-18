@@ -35,18 +35,22 @@ class DataBase:
         """
         return self.__connector
 
-    def create_table(self, name: str, labels: Dict[str, DBType], primary_key: str = None) -> None:
+    @property
+    def tables(self) -> List[str]:
+        return list(self.__tables.keys())
+
+    def add_table(self, tablename: str, columns: Dict[str, DBType], primary_key: str = None) -> None:
         """
         This method creates a table in the database
-        :param name: Table name
-        :param labels: A dictionary where the key is the column name and the value is the data type
+        :param tablename: Table name
+        :param columns: A dictionary where the key is the column name and the value is the data type
         :param primary_key: Key column
         """
-        table = Table(name=name,
+        table = Table(tablename=tablename,
                       cursor=self.__cursor,
                       connector=self.__connector)
-        table.create_table(labels=labels, primary_key=primary_key)
-        self.__tables[name] = table
+        table.create_table(columns=columns, primary_key=primary_key)
+        self.__tables[tablename] = table
 
     def get_table(self, table_name: str) -> Table:
         """
@@ -56,6 +60,10 @@ class DataBase:
         if table_name not in self.__tables:
             raise Exception(f"Table \'{table_name}\' not exist in DataBase!")
         return self.__tables[table_name]
+
+    def delate_table(self, table_name: str) -> None:
+        self.__cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+        del self.__tables[table_name]
 
     def __create_cursor(self, path_to_file: str) -> None:
         """
@@ -82,7 +90,7 @@ class DataBase:
         This method checks if this string is the path to the folder/file
         :param filename: The intended path to the file
         """
-        if filename.endswith(".db"):
+        if filename.endswith(".db") or filename.endswith(".sqlite3"):
             return filename
         else:
             raise Exception(f"The filename \'{filename}\' is not valid!")

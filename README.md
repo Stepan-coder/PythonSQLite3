@@ -38,8 +38,10 @@ There are several generally accepted data types for storing information in the d
 
 * `cursor` - This **property** returns the cursor for the database (directly the thing that works with database cells)  
 * `connector` - This **property** returns the connector for the database (the thing through which the connection to the database is established)  
-* `create_table` - This **method** creates a table in the database
+* `tables` - This **property** returns the list of table names
+* `add_table` - This **method** creates a table in the database
 * `get_table` - This **method** get the "Table" object for further interaction with it.
+* `delete_table` - This **method** delete table with `table_name` name
 
 #### SQLite3_table.py
 
@@ -56,3 +58,38 @@ There are several generally accepted data types for storing information in the d
 * `commit` - This **method** confirms the entry in the table
 
 ### Examples
+
+Для работы с `SQLite3Module` достаточно его просто импортировать в ваш проект, основным файлом является `SQLite3Module/SQLite3_base.py`.
+```Python3
+import os
+from SQLite3Module.SQLite3_base import *
+
+
+my_sqlite3_database = DataBase(path=os.getcwd(), filename="my_BD.sqlite3")
+```
+Теперь не надо знать язык `SQL` чтобы создать таблицу, достаточно просто вызвать соответствующий метод и передать в него соответствующие параметры.  
+*В данном конкеретном случае, уникальным ключом `primary_key` будет колонка `user_id`.*
+```Python3
+my_sqlite3_database.add_table(tablename="my_first_table",
+                              columns={"user_id": DBType.INTEGER,
+                                       "firstname": DBType.TEXT,
+                                       "lastname": DBType.TEXT,
+                                       "real value": DBType.REAL})
+```
+Yes, we can creating one more table :)
+Чтобы изменить `primary_key` нужно при инициализации таблицы, явно указать колонку, которую вы хотите сделать основной.
+Например, вот так:
+```Python3
+my_sqlite3_database.add_table(tablename="my_second_table", 
+                              columns={"user_id": DBType.INTEGER,
+                                       "firstname": DBType.TEXT,
+                                       "lastname": DBType.TEXT,
+                                       "real value": DBType.REAL},
+                              primary_key="real value")
+```
+Естественно, что можно создать, то можно и удалить.  
+**Удаление таблицы не отменяемое действие!!!**
+```Python3
+my_sqlite3_database.delete_table(table_name="my_first_table")
+```
+

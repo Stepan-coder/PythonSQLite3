@@ -4,8 +4,8 @@ from typing import List, Dict, Any
 
 
 class Table:
-    def __init__(self, name: str, cursor: sqlite3.Cursor, connector: sqlite3.Connection):
-        self.__name = name
+    def __init__(self, tablename: str, cursor: sqlite3.Cursor, connector: sqlite3.Connection):
+        self.tablename = tablename
         self.__cursor = cursor
         self.__connector = connector
         self.__primary_key = None
@@ -21,27 +21,27 @@ class Table:
         This property returns a list of column names
         """
         if not self.__is_loaded:
-            raise Exception(f"DataBase \'{self.__name}\' is not exist!. Try using \'Table.create_table\'.")
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
         return list(self.__table_labels.keys())
 
-    def create_table(self, labels: Dict[str, DBType], primary_key: str = None) -> None:
+    def create_table(self, columns: Dict[str, DBType], primary_key: str = None) -> None:
         """
         This method creates a table with the specified columns. If "primary_key" is not specified, then the first
         column will be considered the identifier, otherwise - the one selected by the user.
-        :param labels: A dictionary where the key is the column name and the value is the data type
+        :param columns: A dictionary where the key is the column name and the value is the data type
         :param primary_key: The column that will be considered the key
         """
         if self.__is_loaded:
             raise Exception("DataBase is already exist!")
         if primary_key is not None:
-            if primary_key not in labels:
+            if primary_key not in columns:
                 raise Exception(f"Column \'{primary_key}\' not exist in table labels!")
             self.__primary_key = primary_key
         else:
-            self.__primary_key = list(labels.keys())[0]
-        self.__cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.__name} ({Table.__prep_labels(labels)})")
+            self.__primary_key = list(columns.keys())[0]
+        self.__cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.tablename} ({Table.__prep_labels(columns)})")
         self.__connector.commit()
-        self.__table_labels = labels
+        self.__table_labels = columns
         self.__is_loaded = True
 
     def get_from_cell(self, key: str, column_name: str) -> Any:
@@ -52,10 +52,10 @@ class Table:
         :param column_name: The name of the column from which the value should be returned
         """
         if not self.__is_loaded:
-            raise Exception(f"DataBase \'{self.__name}\' is not exist!. Try using \'Table.create_table\'.")
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
         if column_name not in self.__table_labels:
             raise Exception(f"Column \'{column_name}\' not exist in table labels!")
-        self.__cursor.execute(f"SELECT {column_name} FROM {self.__name} WHERE {self.__primary_key} = '{key}'")
+        self.__cursor.execute(f"SELECT {column_name} FROM {self.tablename} WHERE {self.__primary_key} = '{key}'")
         return self.__cursor.fetchone()[0]
 
     def set_to_cell(self, key: str, column_name: str, new_value: Any, commit: bool = True) -> None:
@@ -67,10 +67,10 @@ class Table:
         :param commit: Is it worth committing (often a commit is needed 1 time in 10-100 operations)
         """
         if not self.__is_loaded:
-            raise Exception(f"DataBase \'{self.__name}\' is not exist!. Try using \'Table.create_table\'.")
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
         if column_name not in self.__table_labels:
             raise Exception(f"Column \'{column_name}\' not exist in table labels!")
-        self.__cursor.execute(f"UPDATE {self.__name} SET {column_name} = '{new_value}' WHERE {self.__primary_key} = '{key}'")
+        self.__cursor.execute(f"UPDATE {self.tablename} SET {column_name} = '{new_value}' WHERE {self.__primary_key} = '{key}'")
         if commit:
             self.__connector.commit()
 
@@ -81,12 +81,12 @@ class Table:
         :param commit: Is it worth committing (often a commit is needed 1 time in 10-100 operations)
         """
         if not self.__is_loaded:
-            raise Exception(f"DataBase \'{self.__name}\' is not exist!. Try using \'Table.create_table\'.")
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
         if len(row) != len(self.__table_labels):
             raise Exception(f"There are only {len(self.__table_labels)} columns in the database "
-                            f"\'{self.__name}\', and you are trying to write {len(row)}")
+                            f"\'{self.tablename}\', and you are trying to write {len(row)}")
         values = ", ".join(["'" + str(i) + "'" for i in row])
-        self.__cursor.execute(f"INSERT INTO {self.__name} VALUES ({values})")
+        self.__cursor.execute(f"INSERT INTO {self.tablename} VALUES ({values})")
         if commit:
             self.__connector.commit()
 
@@ -96,8 +96,8 @@ class Table:
         :param key: Unique identifier
         """
         if not self.__is_loaded:
-            raise Exception(f"DataBase \'{self.__name}\' is not exist!. Try using \'Table.create_table\'.")
-        self.__cursor.execute(f"SELECT * FROM {self.__name} WHERE {self.__primary_key} = '{key}'")
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
+        self.__cursor.execute(f"SELECT * FROM {self.tablename} WHERE {self.__primary_key} = '{key}'")
         request = self.__cursor.fetchall()
         if len(request) == 0:
             raise Exception("There are no values for this query!")
@@ -112,8 +112,8 @@ class Table:
         :param key: Unique identifier
         """
         if not self.__is_loaded:
-            raise Exception(f"DataBase \'{self.__name}\' is not exist!. Try using \'Table.create_table\'.")
-        self.__cursor.execute(f"DELETE FROM {self.__name} WHERE {self.__primary_key} = '{key}'")
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
+        self.__cursor.execute(f"DELETE FROM {self.tablename} WHERE {self.__primary_key} = '{key}'")
         self.__connector.commit()
 
     def get_column(self, column_name: str) -> List[Any]:
@@ -122,10 +122,10 @@ class Table:
         :param column_name: Column name
         """
         if not self.__is_loaded:
-            raise Exception(f"DataBase \'{self.__name}\' is not exist!. Try using \'Table.create_table\'.")
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
         if column_name not in self.__table_labels:
             raise Exception(f"Column \'{column_name}\' not exist in table labels!")
-        self.__cursor.execute(f"SELECT {column_name} FROM {self.__name}")
+        self.__cursor.execute(f"SELECT {column_name} FROM {self.tablename}")
         return [sfa[0] for sfa in self.__cursor.fetchall()]
 
     def get_all_keys(self) -> List[Any]:
@@ -133,8 +133,8 @@ class Table:
         This method returns all values of all identifiers (a column whose values are unique for each row)
         """
         if not self.__is_loaded:
-            raise Exception(f"DataBase \'{self.__name}\' is not exist!. Try using \'Table.create_table\'.")
-        self.__cursor.execute(f"SELECT {self.__primary_key} FROM {self.__name}")
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
+        self.__cursor.execute(f"SELECT {self.__primary_key} FROM {self.tablename}")
         return [sfa[0] for sfa in self.__cursor.fetchall()]
 
     def commit(self) -> None:
