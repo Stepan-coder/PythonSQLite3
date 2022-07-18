@@ -57,8 +57,9 @@ There are several generally accepted data types for storing information in the d
 * `get_all_keys` - This **method** returns all values of all identifiers (a column whose values are unique for each row)
 * `commit` - This **method** confirms the entry in the table
 
+
 ### Examples
-**
+
 To work with `SQLite3Module`, it is enough to simply import it into your project, the main file is `SQLite3Module/SQLite3_base.py `.  
 ```Python3
 import os
