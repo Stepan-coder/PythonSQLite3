@@ -88,10 +88,9 @@ my_sqlite3_database.add_table(tablename="my_second_table",
                                        "real value": DBType.REAL},
                               primary_key="real value")
 ```
-Естественно, что можно создать, то можно и удалить.  
-**Удаление таблицы не отменяемое действие!!!**
+Naturally, what can be created can be deleted. 
+**Deleting a table is not a cancellable action!!!**
 ```Python3
 my_sqlite3_database.delete_table(table_name="my_first_table")
 ```
-Naturally, what can be created can be deleted. 
-**Deleting a table is not a cancellable action!!!**
+
