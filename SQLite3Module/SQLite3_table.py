@@ -1,4 +1,5 @@
 import sqlite3
+from SQLite3Module.SQLite3_status import *
 from SQLite3Module.SQLite3_DBType import *
 from typing import List, Dict, Any
 
@@ -16,6 +17,10 @@ class Table:
         return self.__is_loaded
 
     @property
+    def status(self) -> Status:
+        return Status.ENABLE if self.count > 0 else Status.EMPTY
+
+    @property
     def column_names(self) -> List[str]:
         """
         This property returns a list of column names
@@ -23,6 +28,14 @@ class Table:
         if not self.__is_loaded:
             raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
         return list(self.__table_labels.keys())
+
+    @property
+    def columns_count(self) -> int:
+        return len(self.column_names)
+
+    @property
+    def count(self) -> int:
+        return len(self.get_all_keys())
 
     def create_table(self, columns: Dict[str, DBType], primary_key: str = None) -> None:
         """
@@ -74,7 +87,7 @@ class Table:
         if commit:
             self.__connector.commit()
 
-    def add_row(self, row: list, commit: bool = True) -> None:
+    def add_row(self, row: Dict[str, Any], commit: bool = True) -> None:
         """
         This method adds a new row to the table
         :param row: List of row values
@@ -85,7 +98,7 @@ class Table:
         if len(row) != len(self.__table_labels):
             raise Exception(f"There are only {len(self.__table_labels)} columns in the database "
                             f"\'{self.tablename}\', and you are trying to write {len(row)}")
-        values = ", ".join(["'" + str(i) + "'" for i in row])
+        values = ", ".join(["'" + str(i) + "'" for i in list(row.values())])
         self.__cursor.execute(f"INSERT INTO {self.tablename} VALUES ({values})")
         if commit:
             self.__connector.commit()

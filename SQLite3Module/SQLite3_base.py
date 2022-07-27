@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from typing import List, Dict, Any
+from prettytable import PrettyTable
 from SQLite3Module.SQLite3_table import *
 from SQLite3Module.SQLite3_DBType import *
 
@@ -19,6 +20,21 @@ class DataBase:
 
     def __len__(self):
         return len(self.__tables)
+
+    def __str__(self):
+        table = PrettyTable()
+        table.title = f"{'Empty ' if not len(self.__tables.keys()) > 0 else ''}DataBase"
+        table.field_names = ["Name", "Type", "Columns count", "Rows count", "Status"]
+        for this_table in self.__tables:
+            db_status = self.get_table(this_table).status
+            db_rows_cnt = self.get_table(this_table).count
+            db_columns_cnt = self.get_table(this_table).columns_count
+            if self.get_table(this_table).status == Status.ENABLE:
+                status = DataBase.__set_str_cmd_clr("ENABLE", 'GREEN')
+            else:
+                status = DataBase.__set_str_cmd_clr("EMPTY", 'RED')
+            table.add_row([this_table, "<DataBase>", db_columns_cnt, db_rows_cnt, status])
+        return str(table)
 
     @property
     def cursor(self) -> sqlite3.Cursor:
@@ -94,3 +110,14 @@ class DataBase:
             return filename
         else:
             raise Exception(f"The filename \'{filename}\' is not valid!")
+
+    @staticmethod
+    def __set_str_cmd_clr(text: str, color: str) -> str:
+        clr_text = ""
+        if color == 'RED':
+            clr_text = "\033[31m {}\033[0m".format(text)
+        elif color == 'GREEN':
+            clr_text = "\033[32m {}\033[0m".format(text)
+        elif color == 'YELLOW':
+            clr_text = "\033[33m {}\033[0m".format(text)
+        return clr_text
