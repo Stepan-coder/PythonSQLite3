@@ -52,7 +52,7 @@ class Table:
             self.__primary_key = primary_key
         else:
             self.__primary_key = list(columns.keys())[0]
-        self.__cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.tablename} ({Table.__prep_labels(columns)})")
+        self.__cursor.execute(f"CREATE TABLE IF NOT EXISTS {self.tablename} ({Table.__prepare_labels(columns)})")
         self.__connector.commit()
         self.__table_labels = columns
         self.__is_loaded = True
@@ -156,11 +156,30 @@ class Table:
         """
         self.__connector.commit()
 
+    def __prepare_row(self, row: Dict[str, Any]) -> str:
+        """
+        This method converts the string passed by the user in dictionary format into the SQL-friendly part of the command
+        :param labels:A dictionary where the key is the column name and the values are the data type from the DBType set
+        """
+        values = []
+        for column in self.column_names:
+            if column in list(row.values()):
+                values.append(row[column])
+            else:
+                if self.__table_labels[column] == DBType.INTEGER:
+                    values.append(0)
+                elif self.__table_labels[column] == DBType.REAL:
+                    values.append(0.0)
+                elif self.__table_labels[column] == DBType.TEXT:
+                    values.append("")
+                elif self.__table_labels[column] == DBType.BLOB:
+                    values.append(None)
+        return ", ".join(["'" + str(i) + "'" for i in values])
+
     @staticmethod
-    def __prep_labels(labels: Dict[str, DBType]) -> str:
+    def __prepare_labels(labels: Dict[str, DBType]) -> str:
         """
         This method converts a custom dictionary with columns and their types into a SQL-friendly part of the command
         :param labels:A dictionary where the key is the column name and the values are the data type from the DBType set
-        :return: The finished part of the string
         """
         return ",".join([f"{label} {labels[label].value}" for label in labels])

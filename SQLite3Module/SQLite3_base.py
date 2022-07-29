@@ -77,7 +77,7 @@ class DataBase:
             raise Exception(f"Table \'{table_name}\' not exist in DataBase!")
         return self.__tables[table_name]
 
-    def delate_table(self, table_name: str) -> None:
+    def delete_table(self, table_name: str) -> None:
         self.__cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
         del self.__tables[table_name]
 
