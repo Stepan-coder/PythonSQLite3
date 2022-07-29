@@ -161,3 +161,5 @@ Some methods have a hidden `commit` argument, it is responsible for the immediat
 my_sqlite3_database.get_table("users").commit()
 ```
 
+# Conclusion
+In my personal opinion, the project turned out to be quite good, and its development is interesting and exciting. I understand perfectly well that this module will never be in production, but I did not have such a goal. My goal was to create a convenient tool for myself and in my opinion it turned out
