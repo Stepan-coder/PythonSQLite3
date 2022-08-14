@@ -150,6 +150,17 @@ class Table:
         self.__cursor.execute(f"SELECT {self.__primary_key} FROM {self.tablename}")
         return [sfa[0] for sfa in self.__cursor.fetchall()]
 
+    def command(self, command: str) -> Any:
+        """
+        This method allows you to execute a custom SQL query 'command'.
+        :param command: Custom SQL query in string format.
+        :type command: str
+        """
+        if not self.__is_loaded:
+            raise Exception(f"DataBase \'{self.tablename}\' is not exist!. Try using \'Table.create_table\'.")
+        self.__cursor.execute(command)
+        return self.__cursor.fetchall()
+
     def commit(self) -> None:
         """
         Confirms the entry in the table

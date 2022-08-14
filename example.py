@@ -87,6 +87,7 @@ print(my_sqlite3_database.get_table("users").columns_count)
 # The `count` property contains the number of rows in the table
 print(my_sqlite3_database.get_table("users").count)
 
+
 # Conclusion
 
 
